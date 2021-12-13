@@ -1,15 +1,60 @@
 import React from 'react';
+import axios from 'axios';
 import Movies from './MovieList.js'
 import MovieListRender from './MovieListRender.jsx'
+import MovieAdd from './MovieAdd.jsx'
+import Search from './Search.jsx'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      Movies,
+    }
+    this.add = this.add.bind(this)
+    this.search = this.search.bind(this)
+  }
+
+  componentDidMount() {
+    axios.get('/api/movies')
+    .then((response) => {
+      this.setState({Movies: response.data})
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  add(Movie) {
+    axios.post('/api/movies', Movie)
+    .then((response) => {
+      this.setState({Movies: response.data})
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  search(query) {
+    let searchedMov = []
+    let mov = this.state.Movies.map((movie) => {
+      if (movie.title.includes(query)) {
+        movie.render = true
+      } else {
+        movie.render = false
+      }
+        searchedMov.push(movie)
+    });
+    this.setState({Movies: searchedMov})
   }
 
   render () {
     return (
-      <MovieListRender Movies={Movies} />
+      <div>
+        <Search searchFor={this.search}/>
+        <MovieListRender Movies={this.state.Movies} />
+        <MovieAdd add={this.add}/>
+      </div>
     )
   }
 };

@@ -1,14 +1,29 @@
 import React from 'react';
 
-const MovieRender = ({Movie, listing}) => {
-  if ((Movie.render === true || Movie.render === undefined) && listing === Movie.watchStatus) {
-    return (
-      <li>{Movie.title}</li>
-    )
-  } else {
-    return (
-      ''
-    )
+class MovieRender extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+
+    }
+    this.changeWS = this.changeWS.bind(this)
+  }
+
+  changeWS(event) {
+    this.props.changeWS(this.props.Movie)
+  }
+
+  render () {
+    if ((this.props.Movie.render === true || this.props.Movie.render === undefined)
+    && this.props.listing === this.props.Movie.watchStatus) {
+      return (
+        <li onClick={this.changeWS}>{this.props.Movie.title}</li>
+      )
+    } else {
+      return (
+        ''
+      )
+    }
   }
 }
 

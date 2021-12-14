@@ -25,7 +25,8 @@ class MovieListRender extends React.Component {
         <span> </span>
         <span onClick={this.WatchList}>Watched</span>
         <ul className='List'>
-          {this.props.Movies.map((Movie) => <MovieRender Movie={Movie} key={Movie.movie_id} listing={this.state.listing}/>)}
+          {this.props.Movies.map((Movie) => <MovieRender Movie={Movie} key={Movie.movie_id}
+          listing={this.state.listing} changeWS={this.props.changeWS}/>)}
         </ul>
       </div>
     )

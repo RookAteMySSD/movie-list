@@ -13,6 +13,7 @@ class App extends React.Component {
     }
     this.add = this.add.bind(this)
     this.search = this.search.bind(this)
+    this.changeWS = this.changeWS.bind(this)
   }
 
   componentDidMount() {
@@ -27,6 +28,23 @@ class App extends React.Component {
 
   add(Movie) {
     axios.post('/api/movies', Movie)
+    .then((response) => {
+      this.setState({Movies: response.data})
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  changeWS(Movie) {
+    let newState = ''
+    if (Movie.watchStatus === 'watched') {
+      newState = 'unwatched'
+    }
+    if (Movie.watchStatus === 'unwatched') {
+      newState = 'watched'
+    }
+    axios.patch('/api/movies', {Movie, newState})
     .then((response) => {
       this.setState({Movies: response.data})
     })
@@ -52,7 +70,7 @@ class App extends React.Component {
     return (
       <div>
         <Search searchFor={this.search}/>
-        <MovieListRender Movies={this.state.Movies} />
+        <MovieListRender Movies={this.state.Movies} changeWS={this.changeWS}/>
         <MovieAdd add={this.add}/>
       </div>
     )
